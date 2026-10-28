@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm" style="max-width: 640px;">
+ <div class="card-body">
+ <h2 class="h4 mb-3">{{ title }}</h2>
+ <form method="post" novalidate>
+ {% for f in fields %}
+ <div class="mb-3">
+ <label class="form-label" for="{{ f.name }}">{{ f.label }}</label>
+ {% if f.type == 'select' %}
+ <select class="form-select" id="{{ f.name }}" name="{{ f.name }}">
+ {% for value, label in f.options %}
+ <option value="{{ value }}" {% if values.get(f.name, '') | string == value | string %}selected{% endif %}>{{ label }}</option>
+ {% endfor %}
+ </select>
+ {% else %}
+ <input class="form-control" id="{{ f.name }}" name="{{ f.name }}" type="{{ f.type or 'text' }}"
+ {% if f.step %}step="{{ f.step }}"{% endif %}
+ value="{% if f.type != 'password' %}{{ values.get(f.name, '') }}{% endif %}">
+ {% endif %}
+ </div>
+ {% endfor %}
+ <button class="btn btn-primary" type="submit">{{ submit_label }}</button>
+ </form>
+ </div>
+</div>
+{% endblock %}
