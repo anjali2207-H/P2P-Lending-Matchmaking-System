@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Home - Peer-to-Peer Lending Matchmaking System{% endblock %}
+{% block content %}
+<!-- Hero Section -->
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm border">
+  <div class="row align-items-center">
+    <div class="col-lg-8">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-2 fw-semibold">
+        Academic College Project &bull; Problem Statement 105
+      </span>
+      <h1 class="display-6 fw-bold text-dark mt-2">Peer-to-Peer Lending Matchmaking System</h1>
+      <p class="lead text-muted mb-3">
+        An intelligent academic financial platform connecting lenders and borrowers using transparent risk assessment, 
+        rule-based compatibility scoring, and weighted bipartite graph algorithms.
+      </p>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url_for('matching.recommendations') }}" class="btn btn-primary px-4 py-2 fw-semibold">
+          ⚡ Matchmaking Engine
+        </a>
+        <a href="{{ url_for('dashboard.admin') }}" class="btn btn-outline-dark px-4 py-2 fw-semibold">
+          📊 Admin Dashboard
+        </a>
+        {% if not session.get('user_id') %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary px-4 py-2 fw-semibold">
+          🔐 Sign In
+        </a>
+        {% else %}
+        <a href="{{ url_for('auth.my_dashboard') }}" class="btn btn-success px-4 py-2 fw-semibold">
+          👤 My Dashboard
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-4 text-center mt-4 mt-lg-0">
+      <div class="card bg-light border-0 p-3 shadow-sm text-start">
+        <h6 class="fw-bold text-primary mb-2">⚡ 1-Click Quick Demo Login</h6>
+        <p class="small text-muted mb-3">Instantly test the system with role-specific permissions:</p>
+        <div class="d-grid gap-2">
+          <a href="{{ url_for('auth.login', demo='admin') }}" class="btn btn-sm btn-outline-danger text-start">
+            🛡️ <strong>Admin</strong> <small class="text-muted">(admin@p2p.test)</small>
+          </a>
+          <a href="{{ url_for('auth.login', demo='lender') }}" class="btn btn-sm btn-outline-primary text-start">
+            💼 <strong>Lender Carla</strong> <small class="text-muted">(carla@p2p.test)</small>
+          </a>
+          <a href="{{ url_for('auth.login', demo='borrower') }}" class="btn btn-sm btn-outline-success text-start">
+            👤 <strong>Borrower Ravi</strong> <small class="text-muted">(ravi@p2p.test)</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture & Pipeline Cards -->
+<div class="row g-4 mb-4">
+  <div class="col-md-6 col-lg-3">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body">
+        <div class="fs-3 mb-2">👥</div>
+        <h5 class="card-title fw-bold">1. Profiles</h5>
+        <p class="card-text text-muted small">
+          Role-based Lender and Borrower registration with server validation and profile lifecycle management.
+        </p>
+        <div class="d-flex gap-2 mt-auto">
+          <a href="{{ url_for('profiles.lenders') }}" class="btn btn-sm btn-outline-primary">Lenders</a>
+          <a href="{{ url_for('profiles.borrowers') }}" class="btn btn-sm btn-outline-secondary">Borrowers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body">
+        <div class="fs-3 mb-2">⚖️</div>
+        <h5 class="card-title fw-bold">2. Risk Scoring</h5>
+        <p class="card-text text-muted small">
+          Rule-based 4-component risk scoring ($0-100$) and 4-factor compatibility fit with 7 hard constraint checks.
+        </p>
+        <div class="d-flex gap-2 mt-auto">
+          <a href="{{ url_for('scoring.risk_scores') }}" class="btn btn-sm btn-outline-primary">Risk Scores</a>
+          <a href="{{ url_for('scoring.pairs') }}" class="btn btn-sm btn-outline-secondary">Scored Pairs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body">
+        <div class="fs-3 mb-2">🕸️</div>
+        <h5 class="card-title fw-bold">3. Graph Matching</h5>
+        <p class="card-text text-muted small">
+          NetworkX weighted bipartite graph allocating lenders to loans without exceeding available investment limits.
+        </p>
+        <div class="d-flex gap-2 mt-auto">
+          <a href="{{ url_for('matching.recommendations') }}" class="btn btn-sm btn-primary">Matches</a>
+          <a href="{{ url_for('loans.pending') }}" class="btn btn-sm btn-outline-secondary">Pending</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body">
+        <div class="fs-3 mb-2">📈</div>
+        <h5 class="card-title fw-bold">4. Loans & Simulation</h5>
+        <p class="card-text text-muted small">
+          Reducing-balance EMI schedules, simulation of paid, late, and defaulted payments, and audit logging.
+        </p>
+        <div class="d-flex gap-2 mt-auto">
+          <a href="{{ url_for('loans.loans') }}" class="btn btn-sm btn-outline-primary">Loans</a>
+          <a href="{{ url_for('reports.audit_log') }}" class="btn btn-sm btn-outline-secondary">Audit Log</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Live Database Summary -->
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+    <h5 class="mb-0 fw-bold">💾 Live Database Tables & Row Counts</h5>
+    <span class="badge bg-success">SQLite Connected</span>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-sm table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-3">Table Name</th>
+            <th>Description</th>
+            <th class="text-end pe-3">Rows</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set descriptions = {
+            'users': 'Registered user accounts with hashed passwords and role definitions',
+            'lenders': 'Lender financial profiles, available capital, and risk preferences',
+            'borrowers': 'Borrower financial records, income, obligations, and credit history',
+            'loan_requests': 'Borrower loan applications with requested amount and duration',
+            'risk_scores': 'Calculated risk score components, classification, and explanations',
+            'matches': 'Bipartite graph edge evaluations, compatibility scores, and allocations',
+            'loans': 'Active and settled loans generated from approved matches',
+            'repayments': 'Individual reducing-balance instalment schedule entries and payment statuses',
+            'audit_logs': 'Immutable system audit trail tracking all state transitions and events'
+          } %}
+          {% for table, count in counts.items() %}
+          <tr>
+            <td class="ps-3 fw-semibold"><code>{{ table }}</code></td>
+            <td class="text-muted small">{{ descriptions.get(table, 'System table') }}</td>
+            <td class="text-end pe-3"><span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill px-3">{{ count }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
