@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Login - P2P Lending Matchmaker{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+          <div class="display-6 mb-2">🔐</div>
+          <h2 class="h4 fw-bold">Sign In</h2>
+          <p class="text-muted small">Access your personalized dashboard and account features</p>
+        </div>
+
+        <form method="post" action="{{ url_for('auth.login') }}" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ email or '' }}" placeholder="e.g. carla@p2p.test" required autofocus>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Sign In</button>
+        </form>
+
+        <hr class="my-4">
+
+        <div class="card bg-light border-0">
+          <div class="card-body py-3">
+            <h6 class="card-subtitle mb-2 text-muted fw-bold small text-uppercase">⚡ Quick Demo Login (1-Click)</h6>
+            <p class="small text-muted mb-2">Click below to test any role instantly with pre-loaded demo credentials:</p>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="{{ url_for('auth.login', demo='admin') }}" class="btn btn-sm btn-outline-danger">
+                🛡️ Admin <small>(admin@p2p.test)</small>
+              </a>
+              <a href="{{ url_for('auth.login', demo='lender') }}" class="btn btn-sm btn-outline-primary">
+                💼 Lender <small>(Carla)</small>
+              </a>
+              <a href="{{ url_for('auth.login', demo='borrower') }}" class="btn btn-sm btn-outline-success">
+                👤 Borrower <small>(Ravi)</small>
+              </a>
+            </div>
+            <div class="mt-2 text-muted small">Default password for all demo accounts: <code>password123</code></div>
+          </div>
+        </div>
+
+        <div class="text-center mt-3 small text-muted">
+          Don't have an account yet? 
+          <a href="{{ url_for('profiles.register_borrower') }}" class="text-decoration-none">Register as Borrower</a> or 
+          <a href="{{ url_for('profiles.register_lender') }}" class="text-decoration-none">Register as Lender</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

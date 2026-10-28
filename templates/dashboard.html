@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+ <h2 class="h4 mb-0">{{ title }}</h2>
+ <div class="d-flex gap-2">
+ {% for label, url in downloads or [] %}<a class="btn btn-sm btn-outline-primary" href="{{ url }}">{{ label }}</a>{% endfor %}
+ </div>
+</div>
+<div class="row g-3 mb-4">
+ {% for label, value in stats %}
+ <div class="col-6 col-md-3"><div class="card shadow-sm h-100"><div class="card-body py-3">
+ <div class="text-muted small">{{ label }}</div><div class="fs-5 fw-semibold">{{ value }}</div>
+ </div></div></div>
+ {% endfor %}
+</div>
+{% if charts %}
+<div class="row g-3 mb-4">
+ {% for c in charts %}
+ <div class="col-md-6"><div class="card shadow-sm"><div class="card-body">
+ <h3 class="h6">{{ c.title }}</h3>
+ {% if c.data %}<canvas id="{{ c.id }}" height="160"></canvas>{% else %}<p class="text-muted mb-0">No data yet.</p>{% endif %}
+ </div></div></div>
+ {% endfor %}
+</div>
+{% endif %}
+{% macro button(a) %}
+ <a class="btn btn-sm btn-{{ a.style or 'outline-primary' }}" href="{{ a.url }}">{{ a.label }}</a>
+{% endmacro %}
+{% for s in sections or [] %}
+<div class="card shadow-sm mb-4">
+ <div class="card-header">{{ s.title }}</div>
+ <div class="table-responsive"><table class="table table-sm table-hover align-middle mb-0">
+ <thead class="table-light"><tr>{% for key, label in s.columns %}<th>{{ label }}</th>{% endfor %}<th></th></tr></thead>
+ <tbody>
+ {% for row in s.rows %}
+ <tr>{% for key, label in s.columns %}<td>{{ '' if row.get(key) is none else row.get(key) }}</td>{% endfor %}
+ <td class="text-end">{% for a in row.get('_actions', []) %}{{ button(a) }} {% endfor %}</td></tr>
+ {% else %}<tr><td colspan="{{ s.columns|length + 1 }}" class="text-center text-muted py-3">Nothing to show yet.</td></tr>
+ {% endfor %}
+ </tbody></table></div>
+</div>
+{% endfor %}
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+ const charts = {{ charts|tojson }};
+ const palette = ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#20c997'];
+ charts.forEach(c => {
+ const el = document.getElementById(c.id);
+ if (!el || !c.data.length) return;
+ new Chart(el, {type: c.type,
+ data: {labels: c.labels, datasets: [{data: c.data, backgroundColor: palette}]},
+ options: {plugins: {legend: {display: c.type === 'doughnut'}}}});
+ });
+</script>
+{% endblock %}
